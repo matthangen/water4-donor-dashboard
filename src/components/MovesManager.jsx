@@ -41,7 +41,7 @@ function totalTouches(config) {
 
 // ── Main component ─────────────────────────────────────────────────────────
 
-export default function MovesManager({ donors }) {
+export default function MovesManager({ donors, onTasksGenerated }) {
   // Step 1: configure; Step 2: view results
   const [step, setStep] = useState('configure')
 
@@ -77,7 +77,9 @@ export default function MovesManager({ donors }) {
   function generate() {
     const opts = { planWeeks, maxPerDay, defaultOwner, cadenceConfig }
     if (startDate) opts.planStart = new Date(startDate + 'T00:00:00')
-    setTasks(generateMovesPlan(donors, opts))
+    const result = generateMovesPlan(donors, opts)
+    setTasks(result)
+    onTasksGenerated?.(result)
     setPageOffset(0)
     setStep('results')
   }
