@@ -4,10 +4,17 @@ import TierChart from './TierChart.jsx'
 import AlertsPanel from './AlertsPanel.jsx'
 import DonorTable from './DonorTable.jsx'
 import DonorModal from './DonorModal.jsx'
+import MovesManager from './MovesManager.jsx'
 
 export default function Dashboard({ donors, onReset }) {
   const [selectedDonor, setSelectedDonor] = useState(null)
-  const [activeTab, setActiveTab]         = useState('overview') // 'overview' | 'all'
+  const [activeTab, setActiveTab]         = useState('overview')
+
+  const TABS = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'all',      label: `All Donors (${donors.length})` },
+    { id: 'moves',    label: 'Moves Plan' },
+  ]
 
   return (
     <div className="min-h-screen bg-cream flex flex-col">
@@ -31,10 +38,7 @@ export default function Dashboard({ donors, onReset }) {
       {/* Tabs */}
       <div className="bg-white border-b border-gray-200 px-6">
         <div className="flex gap-6 max-w-7xl mx-auto">
-          {[
-            { id: 'overview', label: 'Overview' },
-            { id: 'all',      label: `All Donors (${donors.length})` },
-          ].map(tab => (
+          {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
@@ -62,6 +66,10 @@ export default function Dashboard({ donors, onReset }) {
 
         {activeTab === 'all' && (
           <DonorTable donors={donors} onSelectDonor={setSelectedDonor} />
+        )}
+
+        {activeTab === 'moves' && (
+          <MovesManager donors={donors} />
         )}
       </main>
 
